@@ -1,17 +1,15 @@
-#!/bin/sh
-# Logger from this post http://www.cubicrace.com/2016/03/log-tracing-mechnism-for-shell-scripts.html
-source ./colors.sh
-#${BASH_SOURCE}
+#!/bin/bash
+. $(dirname "$(readlink -f "$BASH_SOURCE")")/colors.sh
 
 display_help() {
     local s=" "
     printf "\v${s}${Green}Usage:${s}source ./logger.sh [Flags...]${Color_Off}\n${Blue}" >&2
     printf "%4s-c, --colors%10susing colors for output (optional)\n" $s $s
     printf "%-4s-h, --help%12shelp information${Color_Off}" $s $s
-    exit 1
+    exit 0
 }
 
-colors=true
+Colors=true
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -22,7 +20,7 @@ while [ $# -gt 0 ]; do
       ;;
     --colors*|-c*)
       if [[ "$1" != *=* ]]; then shift; fi
-      colors="${1#*=}"
+      Colors="${1#*=}"
       ;;
     *)
       >&2 printf "${Red}Error:${Color_Off} Invalid argument\n"
@@ -37,42 +35,93 @@ function timestamp {
     DATE=`date +%Y-%m-%d`
     TIME=`date +%H:%M:%S`
     ZONE=`date +"%Z %z"`
-    echo $DATE $TIME $ZONE
+    printf "$DATE $TIME $ZONE"
 }
 
-function INFO(){
-    local function_name="${FUNCNAME[1]}"
-    local msg="$1"
-    timeAndDate=`timestamp`
-    if [ "${colors}" == true ]
+function printFuncName {
+    local fn=""
+    local postfix="=>"
+    local space=" "
+    local color=$1
+    for value in "${@:3}"
+    do
+      if [ "${value}" != "" ]
+      then
+        if [ "${fn}" != "" ]
+        then
+          fn+=" "
+        fi
+        fn="${fn}${color}${value}${Color_Off} $postfix"
+      fi
+    done
+    tmp="${fn%$postfix}"
+    if [[ "${Colors}" == true ]]
     then
-        echo "[${Yellow}$timeAndDate${Color_Off}] [${Blue}INFO${Color_Off}] [${BIWhite}${0} ${BCyan}$BASH_LINENO${Color_Off}] $msg"
+        if [[ -n "${tmp%$space}" ]]; then printf "${tmp%$space}"; else printf "${color}$2${Color_Off}"; fi
     else
-        echo "[$timeAndDate] [INFO] [${0} $BASH_LINENO] $msg"
+        if [[ -n "${tmp%$space}" ]]; then printf "${tmp%$space}"; else printf "$2"; fi
+    fi
+}
+
+function execStr() {
+    local whoRun="${1}"
+    local fName="${2}"
+    if [[ -n ${whoRun} && "${whoRun}" != "$fName" ]]; then printf "${whoRun}"; else printf "$(which bash)"; fi
+}
+
+function INFO {
+    local stack=""
+    local fName=INFO
+    local result="$(printFuncName ${Blue} ${FUNCNAME[@]} "$fName")"
+    local msg="$1"
+    local timeAndDate=`timestamp`
+    local whoRun=$(execStr ${0} $fName)
+    local line=$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)
+    local stack=""
+    local fName=INFO
+    if [[ "${Colors}" == true ]]
+    then
+        stack="${whoRun}${Cyan}${line}"
+        printf "[${Yellow}$timeAndDate${Color_Off}] [${result}] [${BIWhite}${stack#$fName}${Color_Off}] $msg\n"
+    else
+        stack="${whoRun}${line}"
+        printf "[$timeAndDate] [${result}] [${stack#$fName}] $msg\n"
     fi
 }
 
 function DEBUG(){
-    local function_name="${FUNCNAME[1]}"
+    local stack=""
+    local fName=DEBUG
+    local result="$(printFuncName ${Purple} ${FUNCNAME[@]} $fName)"
     local msg="$1"
-    timeAndDate=`timestamp`
-    if [ "${colors}" == true ]
+    local timeAndDate=`timestamp`
+    local whoRun=$(execStr ${0} $fName)
+    local line=$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)
+    if [[ "${Colors}" == true ]]
     then
-        echo "[${Yellow}$timeAndDate${Color_Off}] [${Purple}DEBUG${Color_Off}] [${BIWhite}${0} ${BCyan}$BASH_LINENO${Color_Off}] $msg"
+        stack="${whoRun}${Cyan}${line}"
+        printf "[${Yellow}$timeAndDate${Color_Off}] [${result}] [${BIWhite}${stack#$fName}${Color_Off}] $msg\n"
     else
-        echo "[$timeAndDate] [DEBUG] [${0} $BASH_LINENO] $msg"
+        stack="${whoRun}${line}"
+        printf "[$timeAndDate] [${result}] [${stack#$fName}] $msg\n"
     fi
 }
 
 function ERROR(){
-    local function_name="${FUNCNAME[1]}"
+    local stack=""
+    local fName=ERROR
+    local result="$(printFuncName ${Red} ${FUNCNAME[@]} $fName)"
     local msg="$1"
-    timeAndDate=`timestamp`
-    if [ "${colors}" == true ]
+    local timeAndDate=`timestamp`
+    local whoRun=$(execStr ${0} $fName)
+    local line=$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)
+    if [[ "${Colors}" == true ]]
     then
-        echo "[${Yellow}$timeAndDate${Color_Off}] [${Red}ERROR${Color_Off}] [${BIWhite}${0} ${BCyan}$BASH_LINENO${Color_Off}] $msg"
+        stack="${whoRun}${Cyan}${line}"
+        printf "[${Yellow}$timeAndDate${Color_Off}] [${result}] [${BIWhite}${stack#$fName}${Color_Off}] $msg\n"
     else
-        echo "[$timeAndDate] [ERROR] [${0} $BASH_LINENO] $msg"
+        stack="${whoRun}${line}"
+        printf "[$timeAndDate] [${result}] [${stack#$fName}] $msg\n"
     fi
 }
 
