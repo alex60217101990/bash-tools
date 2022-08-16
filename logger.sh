@@ -66,7 +66,11 @@ function printFuncName {
 function execStr() {
     local whoRun="${1}"
     local fName="${2}"
-    if [[ -n ${whoRun} && "${whoRun}" != "$fName" ]]; then printf "${whoRun}"; else printf "$(which bash)"; fi
+    local trimStr=${whoRun%"-"}
+    whoRun="${whoRun#[$'\r\t\n -']}"
+    whoRun="${whoRun%[$'\r\t\n -']}"
+    local shell=$(if [[ -n "$(which bash)" ]]; then printf "$(which bash)"; else printf "$(which sh)"; fi)
+    if [[ "${whoRun}" != "" && "${whoRun}" != "$fName" ]]; then printf "${whoRun}"; else printf "${shell}"; fi
 }
 
 function INFO {
