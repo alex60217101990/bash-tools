@@ -84,7 +84,6 @@ while [ $# -gt 0 ]; do
       slaveCpu="${slaveCpu//[^0-9]/}"
       ;;
     *)
-      shift
       >&2 printf "${Red}Error:${Color_Off} Invalid argument\n"
       exit 1
       ;;
@@ -93,6 +92,7 @@ while [ $# -gt 0 ]; do
 done
 
 installation_multipass
+exit 0
 os=`chack_os`
 
 case $action in

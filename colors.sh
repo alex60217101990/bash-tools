@@ -131,33 +131,39 @@ On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
 function PurpleStr() {
-    printf "${Purple}$1${Color_Off}"
+  # shellcheck disable=SC2059
+  print "${Purple}$1${Color_Off}"
 }
 
 function RedStr() {
-    printf "${Red}$1${Color_Off}"
+  # shellcheck disable=SC2059
+  print "${Red}$1${Color_Off}"
 }
 
 function YellowStr() {
-    printf "${Yellow}$1${Color_Off}"
+  # shellcheck disable=SC2059
+  print "${Yellow}$1${Color_Off}"
 }
 
 function GreenStr() {
-    printf "${Green}$1${Color_Off}"
+  # shellcheck disable=SC2059
+  print "${Green}$1${Color_Off}"
 }
 
 function RepeatColorStr() {
   local symbol="$2"
   local color="$1"
   local count="$3"
+  # shellcheck disable=SC2059
   printf "${color}${symbol}%.0s${Color_Off}" $(seq 1 ${count//[^0-9]/})
 
 }
 
 function CyanStr() {
-    printf "${Cyan}$1${Color_Off}"
+  # shellcheck disable=SC2059
+  print "${Cyan}$1${Color_Off}"
 }
 
 function BlueStr() {
-    printf "${Blue}$1${Color_Off}"
+  print "${Blue}$1${Color_Off}"
 }
