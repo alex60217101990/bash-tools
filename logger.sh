@@ -92,9 +92,9 @@ function INFO {
     local timeAndDate
     timeAndDate="$(timestamp)"
     local whoRun
-    whoRun="$(execStr ${0} $fName)"
+    whoRun="$(execStr "${0}" "$fName")"
     local line
-    # shellcheck disable=SC2059
+    # shellcheck disable=SC2059,SC2030,SC2031
     line="$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)"
     if [[ "${Colors}" == true ]]
     then
@@ -120,9 +120,9 @@ function DEBUG(){
     local timeAndDate
     timeAndDate="$(timestamp)"
     local whoRun
-    whoRun="$(execStr ${0} $fName)"
+    whoRun="$(execStr "${0}" "$fName)"
     local line
-    # shellcheck disable=SC2059
+    # shellcheck disable=SC2059,SC2030,SC2031
     line="$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)"
     if [[ "${Colors}" == true ]]
     then
@@ -142,15 +142,15 @@ function ERROR(){
     local fName
     fName=ERROR
     local result
-    result="$(printfuncName ${Red} ${FUNCNAME[@]} $fName)"
+    result="$(printfuncName "${Red}" "${FUNCNAME[@]}" "$fName")"
     local msg
     msg="$1"
     local timeAndDate
     timeAndDate="$(timestamp)"
     local whoRun
-    whoRun="$(execStr ${0} $fName)"
+    whoRun="$(execStr "${0}" "$fName")"
     local line
-    # shellcheck disable=SC2059
+    # shellcheck disable=SC2059,SC2030,SC2031
     line="$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)"
     if [[ "${Colors}" == true ]]
     then
