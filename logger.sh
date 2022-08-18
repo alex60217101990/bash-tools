@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2128
+# shellcheck disable=SC2128,SC1094
 . "$(dirname "$(readlink -f "$BASH_SOURCE")")"/colors.sh
 
 display_help() {
@@ -92,7 +92,7 @@ function INFO {
     local timeAndDate
     timeAndDate="$(timestamp)"
     local whoRun
-    whoRun="$(execStr "${0}" "$fName")"
+    whoRun=$(execStr "${0}" "$fName")
     local line
     # shellcheck disable=SC2059,SC2030,SC2031
     line="$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)"
@@ -120,7 +120,7 @@ function DEBUG(){
     local timeAndDate
     timeAndDate="$(timestamp)"
     local whoRun
-    whoRun="$(execStr "${0}" "$fName)"
+    whoRun=$(execStr "${0}" "$fName")
     local line
     # shellcheck disable=SC2059,SC2030,SC2031
     line="$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)"
@@ -148,7 +148,7 @@ function ERROR(){
     local timeAndDate
     timeAndDate="$(timestamp)"
     local whoRun
-    whoRun="$(execStr "${0}" "$fName")"
+    whoRun=$(execStr "${0}" "$fName")
     local line
     # shellcheck disable=SC2059,SC2030,SC2031
     line="$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)"
