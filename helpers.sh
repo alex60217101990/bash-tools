@@ -1,6 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC2128
-. $(dirname "$(readlink -f "$BASH_SOURCE")")/logger.sh -c=true
+. "$(dirname "$(readlink -f "$BASH_SOURCE")")"/logger.sh -c=true
 
 function CreateDirIfNotExist() {
     if [[ ! -e "$1" ]]; then
@@ -25,7 +25,8 @@ installation_multipass()
   if command -v multipass > /dev/null 2>&1; then
     INFO "Multipass installation: Already installed"
   else
-    if $(brew install --cask multipass); then
+    if brew install --cask multipass
+    then
       INFO "Multipass installation: OK"
     else
       ERROR "Multipass installation: KO";

@@ -1,6 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC2128
-. $(dirname "$(readlink -f "$BASH_SOURCE")")/colors.sh
+. "$(dirname "$(readlink -f "$BASH_SOURCE")")"/colors.sh
 
 display_help() {
     local s=" "
@@ -72,7 +72,7 @@ function execStr() {
     whoRun="${whoRun#[$'\r\t\n -']}"
     whoRun="${whoRun%[$'\r\t\n -']}"
     # shellcheck disable=SC2059
-    local shell=$(if [[ -n "$(which bash)" ]]; then printf "$(which bash)"; else printf "$(which sh)"; fi)
+    local shell="$(if [[ -n "$(which bash)" ]]; then printf "$(which bash)"; else printf "$(which sh)"; fi)"
     # shellcheck disable=SC2059
     if [[ "${whoRun}" != "" && "${whoRun}" != "$fName" ]]; then printf "${whoRun}"; else printf "${shell}"; fi
 }
@@ -80,12 +80,12 @@ function execStr() {
 function INFO {
     local stack=""
     local fName=INFO
-    local result="$(printfuncName ${Blue} ${FUNCNAME[@]} "$fName")"
+    local result="$(printfuncName "${Blue}" "${FUNCNAME[@]}" "$fName")"
     local msg="$1"
-    local timeAndDate=`timestamp`
-    local whoRun=$(execStr ${0} $fName)
+    local timeAndDate="$(timestamp)"
+    local whoRun="$(execStr ${0} $fName)"
     # shellcheck disable=SC2059
-    local line=$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)
+    local line="$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)"
     local stack=""
     local fName=INFO
     if [[ "${Colors}" == true ]]
@@ -103,12 +103,12 @@ function INFO {
 function DEBUG(){
     local stack=""
     local fName=DEBUG
-    local result="$(printfuncName ${Purple} ${FUNCNAME[@]} $fName)"
+    local result="$(printfuncName "${Purple}" "${FUNCNAME[@]}" $fName)"
     local msg="$1"
-    local timeAndDate=`timestamp`
-    local whoRun=$(execStr ${0} $fName)
+    local timeAndDate="$(timestamp)"
+    local whoRun="$(execStr ${0} $fName)"
     # shellcheck disable=SC2059
-    local line=$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)
+    local line="$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)"
     if [[ "${Colors}" == true ]]
     then
         stack="${whoRun}${Cyan}${line}"
@@ -126,10 +126,10 @@ function ERROR(){
     local fName=ERROR
     local result="$(printfuncName ${Red} ${FUNCNAME[@]} $fName)"
     local msg="$1"
-    local timeAndDate=`timestamp`
-    local whoRun=$(execStr ${0} $fName)
+    local timeAndDate="$(timestamp)"
+    local whoRun="$(execStr ${0} $fName)"
     # shellcheck disable=SC2059
-    local line=$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)
+    local line="$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)"
     if [[ "${Colors}" == true ]]
     then
         stack="${whoRun}${Cyan}${line}"
