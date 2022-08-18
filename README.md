@@ -40,3 +40,14 @@ $ /bin/bash github.com/alex60217101990/bash-tools/k3s/library.sh -a start -n loc
 ```shell
 $ /bin/bash github.com/alex60217101990/bash-tools/k3s/library.sh -a delete -n local-env 
 ```
+
+##### Setup kubeconfig file:
+```shell
+$ /bin/bash github.com/alex60217101990/bash-tools/k3s/library.sh -a setup -n local-env
+```
+
+Export new kubeconfig file:
+```shell
+$ export KUBECONFIG=$HOME/.kube/config.d/config_local_env
+```
+

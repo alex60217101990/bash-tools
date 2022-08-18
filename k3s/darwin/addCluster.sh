@@ -26,6 +26,8 @@ multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "sudo apt-get upgrade --assu
 printf "%s %s\n" `RepeatColorStr ${Green} '*' 90` "`CyanStr "mount master"`"
 mkdir -p store
 mkdir -p store/k3s-$CL_NAM-master-0
+multipass exec k3s-$CL_NAM-master-0 sudo apt install sshfs
+multipass exec k3s-$CL_NAM-master-0 sudo snap install multipass-sshfs
 multipass mount -v -u 502:1000 -g 20:1000 store/k3s-$CL_NAM-master-0 k3s-$CL_NAM-master-0:/Users/Ubuntu
 
 printf "%s %s\n" `RepeatColorStr ${Green} '*' 90` "`CyanStr "launch worker"`"
@@ -55,6 +57,8 @@ done
 printf "%s %s\n" `RepeatColorStr ${Green} '*' 90` "`CyanStr "mount workers"`"
 for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
 	mkdir -p store/k3s-$CL_NAM-worker-$CNT
+	multipass exec k3s-$CL_NAM-worker-$CNT sudo apt install sshfs
+	multipass exec k3s-$CL_NAM-worker-$CNT sudo snap install multipass-sshfs
 	multipass mount -v -u 502:1000 -g 20:1000 store/k3s-$CL_NAM-worker-$CNT k3s-$CL_NAM-worker-$CNT:/Users/Ubuntu
 	printf "%s %s\n" `RepeatColorStr ${Green} '*' 90` "`CyanStr "worker $CNT mounted"`"
 done

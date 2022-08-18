@@ -15,7 +15,7 @@ display_help() {
     printf "%-4s-ms, --slaveMemory%8sslave nodes drive memory size (optional)\n" $s $s
     printf "%-4s-cm, --masterCpu%10smaster nodes CPU count for node (optional)\n" $s $s
     printf "%-4s-cs, --slaveCpu%11sslave nodes CPU count for node (optional)\n" $s $s
-    printf "%-4s-a, --action%14stype of action ['apply', 'delete', 'stop', 'start']${Color_Off}" $s $s
+    printf "%-4s-a, --action%14stype of action ['apply', 'delete', 'stop', 'start', 'setup']${Color_Off}" $s $s
 }
 
 action=""
@@ -103,6 +103,10 @@ case $action in
     printf "%4s masters CPU: %s %-2s slaves CPU: %s\n" ' ' `PurpleStr $masterCpu` ' ' `PurpleStr $slaveCpu`
     printf "%4s masters memory: %s %-2s slaves memory: %s${Color_Off}\n" ' ' `PurpleStr $masterDrive` ' ' `PurpleStr $slaveDrive`
     source $(dirname "$(readlink -f "$BASH_SOURCE")")/${os}/addCluster.sh $clusterName $slavesCount $masterCpu $slaveCpu $masterRam $slaveRam $masterDrive $slaveDrive
+    exit 0
+    ;;
+  setup)
+    source $(dirname "$(readlink -f "$BASH_SOURCE")")/${os}/setupKubeconfig.sh $clusterName true
     exit 0
     ;;
   start)

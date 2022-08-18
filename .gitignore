@@ -1,0 +1,21 @@
+.DS_Store
+# Common VCS dirs
+.git/
+.gitignore
+.bzr/
+.bzrignore
+.hg/
+.hgignore
+.svn/
+# Common backup files
+*.swp
+*.bak
+*.tmp
+*~
+*tmp
+# Various IDEs
+.project
+.idea/
+*.tmproj
+/k3s/store/
+/k3s/.config_tmp
