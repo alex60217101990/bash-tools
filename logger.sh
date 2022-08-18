@@ -39,7 +39,7 @@ function timestamp {
     printf "%s%s%s" "$DATE" "$TIME" "$ZONE"
 }
 
-function printFuncName {
+function printfuncName {
     local fn=""
     local postfix="=>"
     local space=" "
@@ -58,9 +58,11 @@ function printFuncName {
     tmp="${fn%$postfix}"
     if [[ "${Colors}" == true ]]
     then
-        if [[ -n "${tmp%$space}" ]]; then print "${tmp%$space}"; else print "${color}$2${Color_Off}"; fi
+        # shellcheck disable=SC2059
+        if [[ -n "${tmp%$space}" ]]; then printf "${tmp%$space}"; else printf "${color}$2${Color_Off}"; fi
     else
-        if [[ -n "${tmp%$space}" ]]; then print "${tmp%$space}"; else print "$2"; fi
+        # shellcheck disable=SC2059
+        if [[ -n "${tmp%$space}" ]]; then printf "${tmp%$space}"; else printf "$2"; fi
     fi
 }
 
@@ -69,63 +71,74 @@ function execStr() {
     local fName="${2}"
     whoRun="${whoRun#[$'\r\t\n -']}"
     whoRun="${whoRun%[$'\r\t\n -']}"
-    local shell=$(if [[ -n "$(which bash)" ]]; then print "$(which bash)"; else print "$(which sh)"; fi)
-    if [[ "${whoRun}" != "" && "${whoRun}" != "$fName" ]]; then print "${whoRun}"; else print "${shell}"; fi
+    # shellcheck disable=SC2059
+    local shell=$(if [[ -n "$(which bash)" ]]; then printf "$(which bash)"; else printf "$(which sh)"; fi)
+    # shellcheck disable=SC2059
+    if [[ "${whoRun}" != "" && "${whoRun}" != "$fName" ]]; then printf "${whoRun}"; else printf "${shell}"; fi
 }
 
 function INFO {
     local stack=""
     local fName=INFO
-    local result="$(printFuncName ${Blue} ${FUNCNAME[@]} "$fName")"
+    local result="$(printfuncName ${Blue} ${FUNCNAME[@]} "$fName")"
     local msg="$1"
     local timeAndDate=`timestamp`
     local whoRun=$(execStr ${0} $fName)
-    local line=$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then print " $BASH_LINENO"; fi)
+    # shellcheck disable=SC2059
+    local line=$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)
     local stack=""
     local fName=INFO
     if [[ "${Colors}" == true ]]
     then
         stack="${whoRun}${Cyan}${line}"
-        print "[${Yellow}$timeAndDate${Color_Off}] [${result}] [${BIWhite}${stack#$fName}${Color_Off}] $msg\n"
+        # shellcheck disable=SC2059
+        printf "[${Yellow}$timeAndDate${Color_Off}] [${result}] [${BIWhite}${stack#$fName}${Color_Off}] $msg\n"
     else
         stack="${whoRun}${line}"
-        print "[$timeAndDate] [${result}] [${stack#$fName}] $msg\n"
+        # shellcheck disable=SC2059
+        printf "[$timeAndDate] [${result}] [${stack#$fName}] $msg\n"
     fi
 }
 
 function DEBUG(){
     local stack=""
     local fName=DEBUG
-    local result="$(printFuncName ${Purple} ${FUNCNAME[@]} $fName)"
+    local result="$(printfuncName ${Purple} ${FUNCNAME[@]} $fName)"
     local msg="$1"
     local timeAndDate=`timestamp`
     local whoRun=$(execStr ${0} $fName)
-    local line=$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then print " $BASH_LINENO"; fi)
+    # shellcheck disable=SC2059
+    local line=$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)
     if [[ "${Colors}" == true ]]
     then
         stack="${whoRun}${Cyan}${line}"
-        print "[${Yellow}$timeAndDate${Color_Off}] [${result}] [${BIWhite}${stack#$fName}${Color_Off}] $msg\n"
+        # shellcheck disable=SC2059
+        printf "[${Yellow}$timeAndDate${Color_Off}] [${result}] [${BIWhite}${stack#$fName}${Color_Off}] $msg\n"
     else
         stack="${whoRun}${line}"
-        print "[$timeAndDate] [${result}] [${stack#$fName}] $msg\n"
+        # shellcheck disable=SC2059
+        printf "[$timeAndDate] [${result}] [${stack#$fName}] $msg\n"
     fi
 }
 
 function ERROR(){
     local stack=""
     local fName=ERROR
-    local result="$(printFuncName ${Red} ${FUNCNAME[@]} $fName)"
+    local result="$(printfuncName ${Red} ${FUNCNAME[@]} $fName)"
     local msg="$1"
     local timeAndDate=`timestamp`
     local whoRun=$(execStr ${0} $fName)
-    local line=$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then print " $BASH_LINENO"; fi)
+    # shellcheck disable=SC2059
+    local line=$(if [[ -n $BASH_LINENO && "$BASH_LINENO" != "$fName" ]]; then printf " $BASH_LINENO"; fi)
     if [[ "${Colors}" == true ]]
     then
         stack="${whoRun}${Cyan}${line}"
-        print "[${Yellow}$timeAndDate${Color_Off}] [${result}] [${BIWhite}${stack#$fName}${Color_Off}] $msg\n"
+        # shellcheck disable=SC2059
+        printf "[${Yellow}$timeAndDate${Color_Off}] [${result}] [${BIWhite}${stack#$fName}${Color_Off}] $msg\n"
     else
         stack="${whoRun}${line}"
-        print "[$timeAndDate] [${result}] [${stack#$fName}] $msg\n"
+        # shellcheck disable=SC2059
+        printf "[$timeAndDate] [${result}] [${stack#$fName}] $msg\n"
     fi
 }
 

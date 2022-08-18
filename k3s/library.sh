@@ -92,7 +92,6 @@ while [ $# -gt 0 ]; do
 done
 
 installation_multipass
-exit 0
 os=`chack_os`
 
 case $action in
