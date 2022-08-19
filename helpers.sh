@@ -2,6 +2,12 @@
 # shellcheck disable=SC2128,SC1094
 . "$(dirname "$(readlink -f "$BASH_SOURCE")")"/logger.sh -c=true
 
+function GetTerminalType() {
+  local terminal
+  terminal==$(ps -p$$ -o cmd="",comm="",fname="" 2>/dev/null | sed 's/^-//')
+  echo "${terminal##*/}"
+}
+
 function CreateDirIfNotExist() {
     if [[ ! -e "$1" ]]; then
        mkdir -p "$1"

@@ -95,12 +95,25 @@ cat $configFile
 rm -f $configFileTmp
 
 if [ "$2" = true ]; then
-  printf "%s %s\n" `RepeatColorStr ${Green} '*' 90` "`CyanStr "switch kube context"`"
-  export KUBECONFIG="$configFile"
-  eval 'export KUBECONFIG=$configFile'
+  env=$(printf "export KUBECONFIG=%s:$HOME/.kube/config\n" $configFile)
+
+  if [[ -f "$HOME/.zshrc" ]]; then
+      YellowStr "setup: $HOME/.zshrc\n"
+      echo "$env" | sudo tee -a "$HOME"/.zshrc
+  fi
+
+  if [[ -f "$HOME/.bashrc" ]]; then
+    YellowStr "setup: $HOME/.bashrc\n"
+    echo "$env" | sudo tee -a "$HOME"/.bashrc
+  fi
+
+  export KUBECONFIG="$configFile:$HOME/.kube/config"
+
   kubectl config set-context $clusterName
   kubectl config use-context $clusterName
 fi
+
+YellowStr "terminal type: `GetTerminalType`\n"
 
 printf "%s %s\n" `RepeatColorStr ${Green} '*' 90` "`CyanStr "check new kube config file working"`"
 kubectl get pods --context=$clusterName

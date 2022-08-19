@@ -27,11 +27,11 @@ slavesCount=1
 
 masterRam=2Gi
 slaveRam=2Gi
-masterCpu=2
-slaveCpu=2
-masterDrive=30Gi
-slaveDrive=30Gi
-
+defaultCpu=$(nproc || sysctl -n hw.logicalcpu)
+masterCpu=$(($defaultCpu/2))
+slaveCpu=$(($masterCpu/2))
+masterDrive=30G
+slaveDrive=30G
 
 while [ $# -gt 0 ]; do
   case "$1" in
