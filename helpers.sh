@@ -4,7 +4,7 @@
 
 function GetTerminalType() {
   local terminal
-  terminal=$(ps -p$$ -o cmd="",comm="",fname="" 2>/dev/null | sed 's/^-//')
+  terminal="$(ps -p$$ -o cmd=\"\",comm=\"\",fname=\"\" 2>/dev/null | sed 's/^-//')"
   echo "${terminal##*/}"
 }
 
