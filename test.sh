@@ -1,6 +1,7 @@
 #!/bin/bash
 # shellcheck disable=SC2128,SC1094
-. "$(dirname "$BASH_SOURCE")"/logger.sh -c=true
+. "$(cd "$(dirname "$(readlink "$BASH_SOURCE" || echo "$BASH_SOURCE")")" && pwd)"/logger.sh -c=true
+. "$(cd "$(dirname "$(readlink "$BASH_SOURCE" || echo "$BASH_SOURCE")")" && pwd)"/helpers.sh
 
 INFO "test some text"
 DEBUG "test some debug"

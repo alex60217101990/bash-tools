@@ -1,6 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC2128,SC1094
-. "$(dirname "$BASH_SOURCE")"/colors.sh
+. "$(cd "$(dirname "$(readlink "$BASH_SOURCE" || echo "$BASH_SOURCE")")" && pwd)"/colors.sh
 
 display_help() {
     local s=" "
