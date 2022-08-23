@@ -19,10 +19,12 @@ function CreateDirIfNotExist() {
 
 function CreateDirIfNotExistForce() {
     if [[ ! -e "$1" ]]; then
-      mkdir -p "$1"
+      mkdir -p "$1";
+      return 0
     elif [[ ! -d "$1" ]]; then
-      rm -rf "$1"
-      mkdir -p "$1"
+      rm -rf "$1";
+      mkdir -p "$1";
+      return 0
     else
       >&2 printf "%s %s already exists but is not a directory\n" "$(RedStr "Error:")" "$(YellowStr "$1")"
       exit 1
